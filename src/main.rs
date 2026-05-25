@@ -1,12 +1,13 @@
 mod fps;
 mod physics;
 
+use rapier2d::{dynamics::RigidBodyBuilder, geometry::ColliderBuilder, math::Vec2};
 use sdl3::event::Event;
 use std::time::{Duration, Instant};
 
-use crate::fps::FPS;
+use crate::{fps::FPS, physics::Physics};
 
-const TICK_RATE: f64 = 120_f64;
+const TICK_RATE: f64 = 60_f64;
 
 const WINDOW_WIDTH: u32 = 800;
 const WINDOW_HEIGHT: u32 = 600;
@@ -33,6 +34,26 @@ fn main() {
 
 	let mut fps = FPS::new();
 
+	let mut physics = Physics::new();
+
+	let collider = ColliderBuilder::cuboid(100.0, 0.1).build();
+	physics
+		.collider_set
+		.insert(collider);
+
+	let rigid_body = RigidBodyBuilder::dynamic()
+		.translation(Vec2::new(0.0, 10.0))
+		.build();
+	let collider = ColliderBuilder::ball(0.5)
+		.restitution(0.7)
+		.build();
+	let ball_body_handle = physics
+		.rigid_body_set
+		.insert(rigid_body);
+	physics
+		.collider_set
+		.insert_with_parent(collider, ball_body_handle, &mut physics.rigid_body_set);
+
 	'running: loop {
 		let now = Instant::now();
 		let frame_duration = now.duration_since(last_frame);
@@ -49,6 +70,11 @@ fn main() {
 		}
 
 		while accumulator >= tick_time {
+			physics.step();
+
+			let ball_body = &physics.rigid_body_set[ball_body_handle];
+			println!("Ball Altitude: {}", ball_body.translation().y);
+
 			accumulator -= tick_time;
 		}
 
