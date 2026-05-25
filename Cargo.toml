@@ -8,4 +8,4 @@ sdl3 = {
     version = "0.18.3",
     features = ["build-from-source-static"]
 }
-rapier2d = "0.29"
+rapier2d = "0.32.0"
