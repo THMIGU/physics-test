@@ -29,7 +29,7 @@ impl Physics {
 		Self {
 			rigid_body_set: RigidBodySet::new(),
 			collider_set: ColliderSet::new(),
-			gravity: Vec2::new(0.0, -9.82),
+			gravity: Vec2::new(0_f32, -9.82),
 			integration_parameters: IntegrationParameters::default(),
 			physics_pipeline: PhysicsPipeline::new(),
 			islander_manager: IslandManager::new(),
