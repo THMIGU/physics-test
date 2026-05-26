@@ -37,7 +37,7 @@ fn main() {
 
 	let mut physics = Physics::new();
 
-	let collider = ColliderBuilder::cuboid(100_f32, 0.1).build();
+	let collider = ColliderBuilder::cuboid(100_f32, 0.5).build();
 	let collider_handle = physics
 		.collider_set
 		.insert(collider);
